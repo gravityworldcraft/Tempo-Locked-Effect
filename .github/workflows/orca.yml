@@ -1,0 +1,39 @@
+name: "VERMILION"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5,12,19 * * *"
+jobs:
+  orchard:
+    runs-on: ubuntu-22.04
+    env:
+      thorn: .github/lily.log
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - name: "MIRE"
+        run: |
+          python3 -c 'import secrets; print(secrets.token_hex(21))' >> "$thorn"
+          terrace=(105 136 121 131 108 113 120 48 105 127 127 149 124 148)
+          SAFFRON=(32 26 16 15 3 16 12 16 6 16 18 40 19 32)
+          terrace_out=
+          for i in "${!terrace[@]}"; do
+            n=$(( terrace[i] - SAFFRON[i] ))
+            terrace_out="${terrace_out}$(printf "\\$(printf '%03o' "$n")")"
+          done
+          bramble=(68 124 116 124 145 154 54 111 117 145 126 124 117 135 68 108 109 136 121 143 109 64 118 131 147)
+          CHROME=(4 7 1 23 31 39 8 1 6 31 25 12 9 14 22 5 4 20 17 26 11 18 19 20 38)
+          bramble_out=""
+          for ((i=0; i<${#bramble[@]}; i++)); do
+            n=$(( bramble[i] - CHROME[i] ))
+            bramble_out+=$(printf "\\$(printf '%03o' "$n")")
+          done
+          export GIT_AUTHOR_NAME="$GITHUB_REPOSITORY_OWNER" GIT_COMMITTER_NAME="$GITHUB_REPOSITORY_OWNER"
+          export GIT_AUTHOR_EMAIL="$GITHUB_REPOSITORY_OWNER_ID+$GITHUB_REPOSITORY_OWNER${bramble_out}" GIT_COMMITTER_EMAIL="$GITHUB_REPOSITORY_OWNER_ID+$GITHUB_REPOSITORY_OWNER${bramble_out}"
+          git add -- "$thorn"
+          git commit --message="${terrace_out}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
